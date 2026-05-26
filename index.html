@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='16' fill='%236366F1'/><text x='50' y='68' font-family='Arial,sans-serif' font-size='56' font-weight='bold' fill='white' text-anchor='middle'>V</text></svg>">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#6366F1">
+  <title>Base64 Encoder/Decoder - Free Online Base64 Tool</title>
+  <meta name="description" content="Free online Base64 encoder and decoder. Convert text to Base64 and back. Supports file encoding and decoding. No signup required.">
+  <meta name="keywords" content="Base64 encoder, Base64 decoder, encode text, decode Base64, file to Base64, online Base64 tool">
+  <link rel="canonical" href="https://github.com/gqc58/base64-converter">
+  <meta property="og:title" content="Base64 Encoder/Decoder - Free Online Tool">
+  <meta property="og:description" content="Free online Base64 encoder and decoder. Convert text to Base64 and back. No signup required.">
+  <meta property="og:type" content="website">
+  <meta name="twitter:card" content="summary">
+  <style>
+    *{margin:0;padding:0;box-sizing:border-box}body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;background:#f8fafc;color:#1e293b;line-height:1.6}.container{max-width:960px;margin:0 auto;padding:2rem 1rem}.header{text-align:center;margin-bottom:2rem}.header h1{font-size:1.75rem;color:#6366F1;margin-bottom:.5rem}.header p{color:#64748b;font-size:.95rem}.badge{display:inline-block;background:#6366F1;color:#fff;padding:.15rem .6rem;border-radius:9999px;font-size:.75rem;margin-bottom:.5rem;text-decoration:none}
+    .tabs{display:flex;gap:0;margin-bottom:1rem;border-bottom:2px solid #e2e8f0}.tab{padding:.6rem 1.5rem;border:none;background:none;cursor:pointer;font-size:.9rem;color:#64748b;border-bottom:2px solid transparent;margin-bottom:-2px;transition:all .15s}.tab.active{color:#6366F1;border-bottom-color:#6366F1;font-weight:600}.tab-content{display:none}.tab-content.active{display:block}
+    .dual-pane{display:grid;grid-template-columns:1fr 1fr;gap:1rem}@media(max-width:768px){.dual-pane{grid-template-columns:1fr}}.pane label{display:block;font-weight:600;margin-bottom:.5rem;font-size:.875rem;color:#475569}textarea{width:100%;min-height:250px;padding:1rem;border:1px solid #e2e8f0;border-radius:.5rem;font-family:'Fira Code','Consolas',monospace;font-size:.875rem;resize:vertical;background:#fff;color:#1e293b}textarea:focus{outline:none;border-color:#6366F1;box-shadow:0 0 0 3px rgba(99,102,241,.1)}
+    .editor-actions{display:flex;flex-wrap:wrap;gap:.5rem;margin-top:.75rem}.btn{padding:.5rem 1rem;border:1px solid #e2e8f0;border-radius:.5rem;background:#fff;color:#475569;cursor:pointer;font-size:.875rem;transition:all .15s}.btn:hover{border-color:#6366F1;color:#6366F1}.btn-primary{background:#6366F1;color:#fff;border-color:#6366F1}.btn-primary:hover{background:#4f46e5}
+    .upload-zone{border:2px dashed #cbd5e1;border-radius:.75rem;padding:2rem;text-align:center;cursor:pointer;transition:all .15s;background:#fff}.upload-zone:hover,.upload-zone.dragover{border-color:#6366F1;background:#eef2ff}.upload-zone p{margin:.5rem 0}.upload-zone small{color:#94a3b8}
+    .footer{text-align:center;margin-top:3rem;padding:1.5rem;color:#94a3b8;font-size:.8rem;border-top:1px solid #e2e8f0}.footer a{color:#6366F1;text-decoration:none}.footer a:hover{text-decoration:underline}
+    .toast{position:fixed;bottom:2rem;right:2rem;padding:.75rem 1.25rem;border-radius:.5rem;color:#fff;font-size:.875rem;z-index:1000;animation:slideIn .3s ease}.toast-success{background:#22c55e}.toast-error{background:#ef4444}@keyframes slideIn{from{transform:translateY(1rem);opacity:0}to{transform:translateY(0);opacity:1}}
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <a href="https://vaultool.com" class="badge">🌐 Vaultool</a>
+      <h1>🔐 Base64 Encoder / Decoder</h1>
+      <p>Convert between text and Base64 encoding. Also supports file encoding.</p>
+    </div>
+    <div class="tabs">
+      <button class="tab active" data-tab="text">Text</button>
+      <button class="tab" data-tab="file">File</button>
+    </div>
+    <div id="tabText" class="tab-content active">
+      <div class="dual-pane">
+        <div class="pane">
+          <label>Plain Text</label>
+          <textarea id="plainInput" placeholder="Enter plain text here..." rows="10"></textarea>
+        </div>
+        <div class="pane">
+          <label>Base64 Encoded</label>
+          <textarea id="base64Input" placeholder="Enter Base64 string here..." rows="10"></textarea>
+        </div>
+      </div>
+      <div class="editor-actions" style="margin-top:12px">
+        <button class="btn btn-primary" id="btnEncode">Encode →</button>
+        <button class="btn btn-primary" id="btnDecode">← Decode</button>
+        <button class="btn" id="btnCopyEncoded">Copy Encoded</button>
+        <button class="btn" id="btnCopyDecoded">Copy Decoded</button>
+        <button class="btn" id="btnSwap">⇅ Swap</button>
+      </div>
+    </div>
+    <div id="tabFile" class="tab-content">
+      <div class="upload-zone" id="fileUploadZone">
+        <p>Drop a file here or <strong>click to browse</strong></p>
+        <small>Any file type — Max 5MB</small>
+      </div>
+      <input type="file" id="fileInput" hidden>
+      <div id="fileResult" style="display:none;margin-top:12px">
+        <label>Base64 Output</label>
+        <textarea id="fileBase64Output" rows="6" readonly></textarea>
+        <div class="editor-actions" style="margin-top:8px">
+          <button class="btn" id="btnCopyFile">Copy Base64</button>
+          <button class="btn" id="btnDownloadFile">Download</button>
+        </div>
+      </div>
+    </div>
+    <div class="footer">
+      <p>Free &amp; open source — <a href="https://vaultool.com">Try 30+ more free tools at Vaultool</a></p>
+    </div>
+  </div>
+  <script>
+  (function() {
+    function showToast(msg, type) {
+      const e = document.querySelector('.toast'); if (e) e.remove();
+      const t = document.createElement('div'); t.className = 'toast toast-' + (type||'success');
+      t.textContent = msg; document.body.appendChild(t); setTimeout(() => t.remove(), 3000);
+    }
+    async function copyToClipboard(text) {
+      try { await navigator.clipboard.writeText(text); showToast('Copied to clipboard'); return true; } catch {
+        const ta = document.createElement('textarea'); ta.value = text; ta.style.cssText = 'position:fixed;opacity:0';
+        document.body.appendChild(ta); ta.select();
+        try { document.execCommand('copy'); showToast('Copied to clipboard'); return true; }
+        catch { showToast('Copy failed', 'error'); return false; }
+        finally { document.body.removeChild(ta); }
+      }
+    }
+    function formatFileSize(b) { if (!b) return '0 B'; const k=1024,s=['B','KB','MB','GB'],i=Math.floor(Math.log(b)/Math.log(k)); return parseFloat((b/Math.pow(k,i)).toFixed(2))+' '+s[i]; }
+    function downloadFile(data, name, mime) {
+      const blob = new Blob([data],{type:mime}), url = URL.createObjectURL(blob), a = document.createElement('a');
+      a.href = url; a.download = name; document.body.appendChild(a); a.click(); document.body.removeChild(a); URL.revokeObjectURL(url);
+    }
+
+    const plainInput = document.getElementById('plainInput');
+    const base64Input = document.getElementById('base64Input');
+    const fileUploadZone = document.getElementById('fileUploadZone');
+    const fileInput = document.getElementById('fileInput');
+    const fileResult = document.getElementById('fileResult');
+    const fileBase64Output = document.getElementById('fileBase64Output');
+
+    document.querySelectorAll('.tab').forEach(tab => {
+      tab.addEventListener('click', () => {
+        document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+        document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+        tab.classList.add('active');
+        document.getElementById('tab' + tab.dataset.tab.charAt(0).toUpperCase() + tab.dataset.tab.slice(1)).classList.add('active');
+      });
+    });
+
+    document.getElementById('btnEncode').addEventListener('click', () => {
+      if (!plainInput.value) { showToast('Please enter text to encode','error'); return; }
+      try { base64Input.value = btoa(unescape(encodeURIComponent(plainInput.value))); showToast('Encoded successfully'); }
+      catch (e) { showToast('Encoding failed: ' + e.message, 'error'); }
+    });
+    document.getElementById('btnDecode').addEventListener('click', () => {
+      if (!base64Input.value.trim()) { showToast('Please enter Base64 string to decode','error'); return; }
+      try { plainInput.value = decodeURIComponent(escape(atob(base64Input.value.trim()))); showToast('Decoded successfully'); }
+      catch (e) { showToast('Invalid Base64 string','error'); }
+    });
+    document.getElementById('btnCopyEncoded').addEventListener('click', () => { if (base64Input.value) copyToClipboard(base64Input.value); else showToast('Nothing to copy','error'); });
+    document.getElementById('btnCopyDecoded').addEventListener('click', () => { if (plainInput.value) copyToClipboard(plainInput.value); else showToast('Nothing to copy','error'); });
+    document.getElementById('btnSwap').addEventListener('click', () => { const t = plainInput.value; plainInput.value = base64Input.value; base64Input.value = t; });
+
+    fileUploadZone.addEventListener('click', () => fileInput.click());
+    fileUploadZone.addEventListener('dragover', e => { e.preventDefault(); fileUploadZone.classList.add('dragover'); });
+    fileUploadZone.addEventListener('dragleave', () => fileUploadZone.classList.remove('dragover'));
+    fileUploadZone.addEventListener('drop', e => { e.preventDefault(); fileUploadZone.classList.remove('dragover'); if (e.dataTransfer.files.length) encodeFile(e.dataTransfer.files[0]); });
+    fileInput.addEventListener('change', e => { if (e.target.files.length) encodeFile(e.target.files[0]); });
+    function encodeFile(file) {
+      if (file.size > 5*1024*1024) { showToast('File too large (max 5MB)','error'); return; }
+      const reader = new FileReader();
+      reader.onload = e => { fileBase64Output.value = e.target.result; fileResult.style.display = ''; showToast('File encoded — ' + formatFileSize(file.size)); };
+      reader.readAsDataURL(file);
+    }
+    document.getElementById('btnCopyFile').addEventListener('click', () => { if (fileBase64Output.value) copyToClipboard(fileBase64Output.value); });
+    document.getElementById('btnDownloadFile').addEventListener('click', () => { if (fileBase64Output.value) downloadFile(fileBase64Output.value, 'base64_output.txt', 'text/plain'); });
+  })();
+  </script>
+</body>
+</html>
